@@ -14,6 +14,9 @@ export const ChallansList: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
   
+  const [search, setSearch] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
+  
   useEffect(() => {
     fetchChallans();
   }, []);
@@ -51,6 +54,21 @@ export const ChallansList: React.FC = () => {
 
   const canEdit = user?.role === 'ADMIN' || user?.role === 'SALES';
 
+  const filteredChallans = challans.filter(c => {
+    const custName = c.customer?.name?.toLowerCase() || '';
+    const custBusiness = c.customer?.businessName?.toLowerCase() || '';
+    const term = search.toLowerCase();
+    
+    const matchesSearch = search === '' || 
+      c.challanNumber.toLowerCase().includes(term) || 
+      custName.includes(term) || 
+      custBusiness.includes(term);
+      
+    const matchesStatus = statusFilter === '' || c.status === statusFilter;
+    
+    return matchesSearch && matchesStatus;
+  });
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -71,9 +89,23 @@ export const ChallansList: React.FC = () => {
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <Search className="h-4 w-4 text-slate-400" />
           </div>
-          <Input placeholder="Search challan..." className="pl-9" />
+          <Input 
+            placeholder="Search challan..." 
+            className="pl-9" 
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
         </div>
-        <Button variant="outline">Status</Button>
+        <select 
+          className="flex h-9 w-full sm:w-36 rounded-md border border-slate-200 bg-white px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-900"
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+        >
+          <option value="">All Statuses</option>
+          <option value="DRAFT">Draft</option>
+          <option value="CONFIRMED">Confirmed</option>
+          <option value="CANCELLED">Cancelled</option>
+        </select>
       </div>
 
       <div className="border border-slate-200 rounded-md bg-white overflow-hidden">
@@ -98,14 +130,14 @@ export const ChallansList: React.FC = () => {
                   </div>
                 </TableCell>
               </TableRow>
-            ) : challans.length === 0 ? (
+            ) : filteredChallans.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className="text-center py-8 text-slate-500">
                   No challans found.
                 </TableCell>
               </TableRow>
             ) : (
-              challans.map((challan) => (
+              filteredChallans.map((challan) => (
                 <TableRow key={challan.id}>
                   <TableCell className="font-medium text-slate-900">{challan.challanNumber}</TableCell>
                   <TableCell>{challan.customer?.businessName || challan.customer?.name}</TableCell>
@@ -128,7 +160,12 @@ export const ChallansList: React.FC = () => {
                         <Button variant="ghost" size="sm" onClick={() => cancel(challan.id)} className="text-red-600 hover:text-red-700 hover:bg-red-50">Cancel</Button>
                       </>
                     )}
-                    <Button variant="ghost" size="sm" className="text-slate-500">View</Button>
+                    <Link 
+                      to={`/challans/${challan.id}`}
+                      className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-slate-100 hover:text-slate-900 h-8 px-3 text-slate-500"
+                    >
+                      View
+                    </Link>
                   </TableCell>
                 </TableRow>
               ))
