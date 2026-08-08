@@ -13,7 +13,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const parseResult = loginSchema.safeParse(req.body);
     if (!parseResult.success) {
-      res.status(400).json({ message: 'Invalid input', errors: parseResult.error.errors });
+      res.status(400).json({ message: 'Invalid input', errors: parseResult.error.issues });
       return;
     }
 
