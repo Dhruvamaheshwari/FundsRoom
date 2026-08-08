@@ -13,6 +13,7 @@ import { CreateCustomer } from './pages/CreateCustomer';
 import { EditCustomer } from './pages/EditCustomer';
 import { ProductsList } from './pages/ProductsList';
 import { CreateProduct } from './pages/CreateProduct';
+import { EditProduct } from './pages/EditProduct';
 
 // Placeholder Pages
 const InventoryList = () => <div>Inventory</div>;
@@ -40,6 +41,7 @@ function App() {
               <Route path="/products" element={<ProductsList />} />
               <Route element={<ProtectedRoute allowedRoles={['ADMIN', 'WAREHOUSE']} />}>
                 <Route path="/products/new" element={<CreateProduct />} />
+                <Route path="/products/:id/edit" element={<EditProduct />} />
               </Route>
               
               <Route element={<ProtectedRoute allowedRoles={['ADMIN', 'WAREHOUSE', 'SALES', 'ACCOUNTS']} />}>
