@@ -4,7 +4,6 @@ import type { Customer } from '../types';
 import { Link } from 'react-router-dom';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/Table';
 import { Badge } from '../components/ui/Badge';
-import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { Search, Plus } from 'lucide-react';
 
@@ -116,7 +115,12 @@ export const CustomersList: React.FC = () => {
                   </Badge>
                 </TableCell>
                 <TableCell>
-                  <Button variant="ghost" size="sm" className="h-8 text-slate-500">Edit</Button>
+                  <Link 
+                    to={`/customers/${c.id}/edit`} 
+                    className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-slate-100 hover:text-slate-900 h-8 px-3 text-slate-500"
+                  >
+                    Edit
+                  </Link>
                 </TableCell>
               </TableRow>
             ))}

@@ -10,6 +10,7 @@ import { ChallansList } from './pages/ChallansList';
 import { CreateChallan } from './pages/CreateChallan';
 import { CustomersList } from './pages/CustomersList';
 import { CreateCustomer } from './pages/CreateCustomer';
+import { EditCustomer } from './pages/EditCustomer';
 import { ProductsList } from './pages/ProductsList';
 
 // Placeholder Pages
@@ -32,6 +33,7 @@ function App() {
               <Route element={<ProtectedRoute allowedRoles={['ADMIN', 'SALES', 'ACCOUNTS']} />}>
                 <Route path="/customers" element={<CustomersList />} />
                 <Route path="/customers/new" element={<CreateCustomer />} />
+                <Route path="/customers/:id/edit" element={<EditCustomer />} />
               </Route>
 
               <Route path="/products" element={<ProductsList />} />
