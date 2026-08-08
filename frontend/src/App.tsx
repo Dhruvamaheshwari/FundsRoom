@@ -1,0 +1,55 @@
+import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import { AdminLayout } from './layouts/AdminLayout';
+import Login from './pages/Login';
+
+import { Dashboard } from './pages/Dashboard';
+import { ChallansList } from './pages/ChallansList';
+import { CreateChallan } from './pages/CreateChallan';
+import { CustomersList } from './pages/CustomersList';
+import { ProductsList } from './pages/ProductsList';
+
+// Placeholder Pages
+const InventoryList = () => <div>Inventory</div>;
+const Unauthorized = () => <div className="p-8 text-center text-xl text-red-600">Unauthorized Access</div>;
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/unauthorized" element={<Unauthorized />} />
+          
+          <Route element={<ProtectedRoute />}>
+            <Route element={<AdminLayout />}>
+              <Route path="/" element={<Navigate to="/dashboard" replace />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              
+              <Route element={<ProtectedRoute allowedRoles={['ADMIN', 'SALES', 'ACCOUNTS']} />}>
+                <Route path="/customers" element={<CustomersList />} />
+              </Route>
+
+              <Route path="/products" element={<ProductsList />} />
+              
+              <Route element={<ProtectedRoute allowedRoles={['ADMIN', 'WAREHOUSE', 'SALES', 'ACCOUNTS']} />}>
+                <Route path="/inventory" element={<InventoryList />} />
+              </Route>
+              
+              <Route path="/challans" element={<ChallansList />} />
+              <Route element={<ProtectedRoute allowedRoles={['ADMIN', 'SALES']} />}>
+                <Route path="/challans/new" element={<CreateChallan />} />
+              </Route>
+            </Route>
+          </Route>
+          
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
+  );
+}
+
+export default App;
