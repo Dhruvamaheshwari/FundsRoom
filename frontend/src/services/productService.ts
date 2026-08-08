@@ -18,12 +18,13 @@ export const productService = {
     const res = await api.put(`/products/${id}`, data);
     return res.data;
   },
-  createStockMovement: async (id: string, data: any) => {
-    const res = await api.post(`/products/${id}/stock-movements`, data);
-    return res.data;
-  },
+
   getAllStockMovements: async (params?: any): Promise<PaginatedResponse<StockMovement>> => {
     const res = await api.get('/stock-movements', { params });
     return { ...res.data, data: res.data.movements || [] };
+  },
+  createStockMovement: async (productId: string, data: { quantity: number; type: 'IN' | 'OUT'; reason: string }) => {
+    const res = await api.post(`/products/${productId}/stock-movements`, data);
+    return res.data;
   }
 };
