@@ -2,6 +2,14 @@
 
 A modern, high-density ERP and CRM operations portal built for enterprise workflow management. The application facilitates full lifecycle tracking of customers, products, inventory ledgers, and sales challans with strict Role-Based Access Control (RBAC).
 
+## Default Roles & Login
+
+If you seeded the database using the provided seed script, you can log in using these default accounts (Password for all: `password123`):
+- **Admin:** admin@example.com
+- **Sales:** sales@example.com
+- **Warehouse:** warehouse@example.com
+- **Accounts:** accounts@example.com
+
 ## Tech Stack
 
 ### Frontend
@@ -102,13 +110,6 @@ FundsRoom/
    npm run dev
    ```
 
-## Default Roles & Login
-
-If you seeded the database using the provided seed script, you can log in using these default accounts (Password for all: `password123`):
-- **Admin:** admin@example.com
-- **Sales:** sales@example.com
-- **Warehouse:** warehouse@example.com
-- **Accounts:** accounts@example.com
 
 ## License
 This project is proprietary and confidential.
