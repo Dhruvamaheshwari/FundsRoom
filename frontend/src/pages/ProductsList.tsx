@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { productService } from '../services/productService';
 import type { Product } from '../types';
+import { Link } from 'react-router-dom';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/Table';
 import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
@@ -32,10 +33,10 @@ export const ProductsList: React.FC = () => {
           <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">Products</h1>
           <p className="text-sm text-slate-500 mt-1">Manage products and inventory.</p>
         </div>
-        <Button className="shrink-0">
+        <Link to="/products/new" className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-900 bg-slate-900 text-slate-50 hover:bg-slate-900/90 h-9 px-4 py-2 shrink-0">
           <Plus className="w-4 h-4 mr-2" />
           Add Product
-        </Button>
+        </Link>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4 mb-6">
