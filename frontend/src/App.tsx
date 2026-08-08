@@ -16,9 +16,7 @@ import { ProductsList } from './pages/ProductsList';
 import { CreateProduct } from './pages/CreateProduct';
 import { EditProduct } from './pages/EditProduct';
 import { InventoryList } from './pages/InventoryList';
-
-// Placeholder Pages
-const Unauthorized = () => <div className="p-8 text-center text-xl text-red-600">Unauthorized Access</div>;
+import { Unauthorized } from './pages/Unauthorized';
 
 function App() {
   return (
