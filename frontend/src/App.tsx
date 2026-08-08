@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
@@ -9,6 +9,7 @@ import { Dashboard } from './pages/Dashboard';
 import { ChallansList } from './pages/ChallansList';
 import { CreateChallan } from './pages/CreateChallan';
 import { CustomersList } from './pages/CustomersList';
+import { CreateCustomer } from './pages/CreateCustomer';
 import { ProductsList } from './pages/ProductsList';
 
 // Placeholder Pages
@@ -30,6 +31,7 @@ function App() {
               
               <Route element={<ProtectedRoute allowedRoles={['ADMIN', 'SALES', 'ACCOUNTS']} />}>
                 <Route path="/customers" element={<CustomersList />} />
+                <Route path="/customers/new" element={<CreateCustomer />} />
               </Route>
 
               <Route path="/products" element={<ProductsList />} />

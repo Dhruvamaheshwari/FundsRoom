@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api';
-import { Users, Package, AlertTriangle, FileText, CheckCircle, FileEdit } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/Table';
+import { Badge } from '../components/ui/Badge';
 
 interface DashboardStats {
   customers: number;
@@ -13,7 +13,6 @@ interface DashboardStats {
 }
 
 export const Dashboard: React.FC = () => {
-  const { user } = useAuth();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -60,43 +59,61 @@ export const Dashboard: React.FC = () => {
   }, []);
 
   if (loading) {
-    return <div className="animate-pulse flex flex-col space-y-4">
-      <div className="h-8 bg-gray-200 rounded w-1/4"></div>
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {[1, 2, 3, 4, 5, 6].map(i => <div key={i} className="h-32 bg-gray-200 rounded-lg"></div>)}
-      </div>
+    return <div className="animate-pulse space-y-4">
+      <div className="h-8 bg-slate-200 rounded w-1/4 mb-8"></div>
+      <div className="h-24 bg-slate-200 rounded-md border border-slate-200"></div>
     </div>;
   }
 
   if (error) {
-    return <div className="p-4 bg-red-50 text-red-600 rounded-lg border border-red-200">{error}</div>;
+    return <div className="p-4 bg-red-50 text-red-600 rounded-md border border-red-200 text-sm font-medium">{error}</div>;
   }
 
-  const statCards = [
-    { name: 'Total Customers', stat: stats?.customers, icon: Users, color: 'bg-blue-500' },
-    { name: 'Total Products', stat: stats?.products, icon: Package, color: 'bg-indigo-500' },
-    { name: 'Low Stock Alerts', stat: stats?.lowStock, icon: AlertTriangle, color: 'bg-red-500' },
-    { name: 'Total Challans', stat: stats?.challans, icon: FileText, color: 'bg-purple-500' },
-    { name: 'Confirmed Challans', stat: stats?.confirmedChallans, icon: CheckCircle, color: 'bg-green-500' },
-    { name: 'Draft Challans', stat: stats?.draftChallans, icon: FileEdit, color: 'bg-amber-500' },
-  ];
-
   return (
-    <div>
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Welcome back, {user?.name}</h1>
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">Dashboard</h1>
+        <p className="text-sm text-slate-500 mt-1">Overview of your operations.</p>
+      </div>
       
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {statCards.map((item) => (
-          <div key={item.name} className="bg-white overflow-hidden rounded-xl shadow-sm border border-gray-100 flex items-center p-6 hover:shadow-md transition-shadow">
-            <div className={`p-3 rounded-lg ${item.color} text-white mr-4`}>
-              <item.icon className="h-6 w-6" aria-hidden="true" />
-            </div>
-            <div>
-              <p className="text-sm font-medium text-gray-500 truncate">{item.name}</p>
-              <p className="mt-1 text-3xl font-semibold text-gray-900">{item.stat}</p>
-            </div>
-          </div>
-        ))}
+      <div className="border border-slate-200 rounded-md bg-white overflow-hidden">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-slate-50 hover:bg-slate-50">
+              <TableHead>Metric</TableHead>
+              <TableHead className="text-right">Total</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell className="font-medium text-slate-900">Total Customers</TableCell>
+              <TableCell className="text-right text-slate-600">{stats?.customers}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className="font-medium text-slate-900">Total Products</TableCell>
+              <TableCell className="text-right text-slate-600">{stats?.products}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className="font-medium text-slate-900 flex items-center gap-2">
+                Low Stock Alerts
+                {stats && stats.lowStock > 0 && <Badge variant="warning">Action Needed</Badge>}
+              </TableCell>
+              <TableCell className="text-right text-slate-600">{stats?.lowStock}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className="font-medium text-slate-900">Total Challans</TableCell>
+              <TableCell className="text-right text-slate-600">{stats?.challans}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className="font-medium text-slate-900">Confirmed Challans</TableCell>
+              <TableCell className="text-right text-slate-600">{stats?.confirmedChallans}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className="font-medium text-slate-900">Draft Challans</TableCell>
+              <TableCell className="text-right text-slate-600">{stats?.draftChallans}</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </div>
     </div>
   );

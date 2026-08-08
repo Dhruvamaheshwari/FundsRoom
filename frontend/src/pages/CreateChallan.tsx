@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { customerService } from '../services/customerService';
 import { productService } from '../services/productService';
 import { challanService } from '../services/challanService';
 import type { Customer, Product } from '../types';
 import { Plus, Trash2, Save, ArrowLeft } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Button } from '../components/ui/Button';
+import { Input } from '../components/ui/Input';
 
 export const CreateChallan: React.FC = () => {
   const navigate = useNavigate();
@@ -79,56 +80,73 @@ export const CreateChallan: React.FC = () => {
     }
   };
 
-  if (loading) return <div className="p-8">Loading...</div>;
+  if (loading) return (
+    <div className="animate-pulse space-y-4 max-w-4xl mx-auto">
+      <div className="h-8 bg-slate-200 rounded w-1/4"></div>
+      <div className="h-64 bg-slate-200 rounded-md border border-slate-200"></div>
+    </div>
+  );
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      <div className="flex items-center space-x-4">
-        <Link to="/challans" className="text-gray-500 hover:text-gray-700">
-          <ArrowLeft className="w-6 h-6" />
+      <div className="flex items-center space-x-4 mb-6">
+        <Link to="/challans" className="shrink-0 p-2 rounded-full hover:bg-slate-100 transition-colors text-slate-500 hover:text-slate-900">
+          <ArrowLeft className="w-5 h-5" />
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900">Create Draft Challan</h1>
+        <div>
+          <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">Create Draft Challan</h1>
+          <p className="text-sm text-slate-500 mt-1">Draft a new outbound delivery.</p>
+        </div>
       </div>
 
-      {error && <div className="bg-red-50 text-red-600 p-4 rounded-md border border-red-200">{error}</div>}
+      {error && (
+        <div className="bg-red-50 text-red-600 px-4 py-3 rounded-md border border-red-200 text-sm font-medium">
+          {error}
+        </div>
+      )}
 
-      <form onSubmit={handleSubmit} className="bg-white shadow rounded-lg p-6 space-y-8">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Customer</label>
-          <select
-            className="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2 border"
-            value={customerId}
-            onChange={(e) => setCustomerId(e.target.value)}
-            required
-          >
-            <option value="">Select a customer...</option>
-            {customers.map(c => (
-              <option key={c.id} value={c.id}>{c.businessName || c.name}</option>
-            ))}
-          </select>
+      <form onSubmit={handleSubmit} className="space-y-8">
+        <div className="bg-white border border-slate-200 rounded-md p-6 space-y-4">
+          <h2 className="text-lg font-medium text-slate-900 pb-2 border-b border-slate-100">General Information</h2>
+          
+          <div className="max-w-md space-y-2">
+            <label className="block text-sm font-medium text-slate-700">Customer</label>
+            <select
+              className="flex h-9 w-full rounded-md border border-slate-200 bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-900"
+              value={customerId}
+              onChange={(e) => setCustomerId(e.target.value)}
+              required
+            >
+              <option value="">Select a customer...</option>
+              {customers.map(c => (
+                <option key={c.id} value={c.id}>{c.businessName || c.name}</option>
+              ))}
+            </select>
+          </div>
         </div>
 
-        <div>
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-medium leading-6 text-gray-900">Products</h3>
-            <button
+        <div className="bg-white border border-slate-200 rounded-md p-6">
+          <div className="flex justify-between items-center mb-4 pb-2 border-b border-slate-100">
+            <h2 className="text-lg font-medium text-slate-900">Products</h2>
+            <Button
               type="button"
+              variant="outline"
+              size="sm"
               onClick={handleAddItem}
-              className="flex items-center text-sm text-blue-600 hover:text-blue-900 font-medium"
             >
-              <Plus className="w-4 h-4 mr-1" /> Add Item
-            </button>
+              <Plus className="w-4 h-4 mr-1.5" /> Add Item
+            </Button>
           </div>
           
-          <div className="space-y-4">
+          <div className="space-y-4 pt-2">
             {items.map((item, index) => {
               const selectedProduct = products.find(p => p.id === item.productId);
               return (
-                <div key={index} className="flex items-end space-x-4 bg-gray-50 p-4 rounded-lg border border-gray-200">
-                  <div className="flex-1">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Product</label>
+                <div key={index} className="flex flex-col sm:flex-row sm:items-end gap-4 p-4 bg-slate-50 border border-slate-200 rounded-md">
+                  <div className="flex-1 space-y-2">
+                    <label className="block text-sm font-medium text-slate-700">Product</label>
                     <select
-                      className="w-full border-gray-300 rounded-md shadow-sm p-2 border"
+                      className="flex h-9 w-full rounded-md border border-slate-200 bg-white px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-900"
                       value={item.productId}
                       onChange={(e) => handleChangeItem(index, 'productId', e.target.value)}
                       required
@@ -139,40 +157,47 @@ export const CreateChallan: React.FC = () => {
                       ))}
                     </select>
                   </div>
-                  <div className="w-32">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Qty (Max: {selectedProduct?.currentStock || 0})</label>
-                    <input
+                  <div className="w-full sm:w-32 space-y-2">
+                    <label className="block text-sm font-medium text-slate-700 whitespace-nowrap">
+                      Qty (Max: {selectedProduct?.currentStock || 0})
+                    </label>
+                    <Input
                       type="number"
                       min="1"
-                      className="w-full border-gray-300 rounded-md shadow-sm p-2 border"
+                      className="bg-white"
                       value={item.quantity}
                       onChange={(e) => handleChangeItem(index, 'quantity', e.target.value)}
                       required
                     />
                   </div>
-                  <button
+                  <Button
                     type="button"
+                    variant="danger"
+                    size="icon"
                     onClick={() => handleRemoveItem(index)}
                     disabled={items.length === 1}
-                    className="p-2 text-red-600 hover:bg-red-100 rounded disabled:opacity-50"
+                    className="shrink-0"
+                    title="Remove Item"
                   >
-                    <Trash2 className="w-5 h-5" />
-                  </button>
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
                 </div>
               );
             })}
           </div>
         </div>
 
-        <div className="pt-5 border-t border-gray-200">
-          <button
+        <div className="flex items-center justify-end gap-4 pt-4">
+          <Link to="/challans" className="text-sm font-medium hover:bg-slate-100 px-4 py-2 rounded-md transition-colors">
+            Cancel
+          </Link>
+          <Button
             type="submit"
             disabled={saving}
-            className="flex items-center justify-center w-full sm:w-auto px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none disabled:opacity-50"
           >
-            <Save className="w-5 h-5 mr-2" />
+            <Save className="w-4 h-4 mr-2" />
             {saving ? 'Saving...' : 'Save as Draft'}
-          </button>
+          </Button>
         </div>
       </form>
     </div>
