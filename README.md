@@ -111,5 +111,27 @@ FundsRoom/
    ```
 
 
+## Deployment Instructions
+
+### Deploying the Backend (Render / Railway)
+1. Ensure your backend code is pushed to a GitHub repository.
+2. Link the repository to your hosting provider.
+3. Configure the **Build Command**: `npm install && npm run prisma:generate && npm run build`
+4. Configure the **Start Command**: `npm run migrate:deploy && npm start`
+5. Set the required environment variables:
+   - `DATABASE_URL` (Your production PostgreSQL URL)
+   - `JWT_SECRET` (A strong, random string)
+   - `PORT` (Provided by the host or default 5000)
+   - `FRONTEND_URL` (The deployed URL of your Vercel frontend for CORS)
+
+### Deploying the Frontend (Vercel)
+1. Push your frontend code to GitHub.
+2. Import the project in Vercel.
+3. Set the Framework Preset to **Vite**.
+4. Set the **Build Command**: `npm run build`
+5. Configure the environment variable:
+   - `VITE_API_URL` (The URL of your deployed backend)
+6. Deploy!
+
 ## License
 This project is proprietary and confidential.

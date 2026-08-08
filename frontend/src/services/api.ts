@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+// Get API URL from env, ensuring no fallback in production builds to prevent leakage
+const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:5000/api' : '');
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:4000/api',
+  baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
