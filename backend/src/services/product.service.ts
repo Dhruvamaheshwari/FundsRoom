@@ -2,11 +2,27 @@ import { prisma } from '../utils/prisma';
 import { Prisma } from '@prisma/client';
 
 export const createProduct = async (data: any, createdById: string) => {
-  return prisma.product.create({
-    data: {
-      ...data,
-      createdById,
-    },
+  return prisma.$transaction(async (tx) => {
+    const product = await tx.product.create({
+      data: {
+        ...data,
+        createdById,
+      },
+    });
+
+    if (product.currentStock > 0) {
+      await tx.stockMovement.create({
+        data: {
+          productId: product.id,
+          quantity: product.currentStock,
+          type: 'IN',
+          reason: 'Initial Stock Setup',
+          createdById,
+        },
+      });
+    }
+
+    return product;
   });
 };
 

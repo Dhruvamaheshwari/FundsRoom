@@ -24,6 +24,6 @@ export const productService = {
   },
   getAllStockMovements: async (params?: any): Promise<PaginatedResponse<StockMovement>> => {
     const res = await api.get('/stock-movements', { params });
-    return res.data;
+    return { ...res.data, data: res.data.movements || [] };
   }
 };
