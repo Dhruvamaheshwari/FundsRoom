@@ -63,6 +63,19 @@ FundsRoom/
 
 ## Getting Started
 
+### Docker Setup (Recommended)
+You can run the entire application stack (Frontend, Backend, and PostgreSQL) effortlessly using Docker. 
+
+1. Ensure Docker and Docker Compose are installed on your machine.
+2. From the root directory of the project, run:
+   ```bash
+   docker-compose up --build -d
+   ```
+3. The frontend will be available at `http://localhost:5173` and the backend at `http://localhost:5000`.
+
+### Local Setup (Manual)
+If you prefer not to use Docker, follow the manual setup instructions below.
+
 ### Prerequisites
 - Node.js (v18 or higher recommended)
 - PostgreSQL running locally or remotely
