@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: fundsroom-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: fundsroom
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: fundsroom-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URL=postgres://b18b01443e868a7dc9d80e8a2e5a8118a113b29317a00660db1e932a23c8f8b4:sk_I-yNqB2jF7074211vNamX@pooled.db.prisma.io:5432/postgres?sslmode=require
+      - JWT_SECRET=supersecretjwtkey
+      - PORT=5000
+      - FRONTEND_URL=http://localhost:5173
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=http://localhost:5000/api
+    container_name: fundsroom-frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  pgdata:
